@@ -9,6 +9,7 @@
     <div>
       End my exam at <input v-model.number="endExamTime" type="number" class="input"> minutes
     </div>
+    <div v-if="!isRunning">Paused</div>
     <div style="font-size: 3rem">{{ formatTime(time, false) }}</div>
     P: Start/Stop | ENTER: Split | J: Show/Hide Timer | Hold R for 5s: Reset<br>
     Timer is {{ isVisible ? 'visible' : 'hidden' }}
