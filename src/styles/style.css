@@ -1,0 +1,633 @@
+:root {
+    --background-primary: #111111;
+    --background-secondary: #1a1a1a;
+    --background-tertiary: #222222;
+    --foreground-primary: rgb(221, 221, 221);
+    --foreground-secondary: rgb(165, 165, 165);
+    --foreground-border: rgb(56, 56, 56);
+    --blue: #18488f;
+    --red: #8a1010;
+    --yellow: #a56023;
+    --green: #068606;
+}
+
+html {
+    min-height: 100%;
+    scroll-behavior: smooth;
+    scroll-padding-top: 20%;
+}
+
+body {
+    background: var(--background-primary);
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    color: var(--foreground-primary);
+    overflow-x: hidden;
+    position: relative;
+    z-index: -1001;
+
+    background-repeat: no-repeat;
+    background-position-y: bottom;
+    background-size: 100% auto;
+    flex: 1;
+}
+
+main {
+    height: 0;
+}
+
+.navbar {
+    height: 50px;
+    background: var(--background-secondary);
+    z-index: 123435589;
+    width: 100%;
+    border-bottom: var(--foreground-border) 2px solid;
+    position: fixed;
+}
+
+.navbar-content {
+    padding: 10px;
+}
+
+@supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+    .navbar {
+        background: none;
+        -webkit-backdrop-filter: blur(16px);
+        backdrop-filter: blur(16px);
+    }
+}
+
+.navbar-links {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    float: right;
+}
+
+.navbar-links form .input {
+    margin: 0;
+}
+
+.navbar-links li {
+    display: contents;
+}
+
+.content-content li::marker {
+    font-weight: bolder;
+    font-size: larger;
+}
+
+@media only screen and (max-width: 500px) {
+    .navbar-links {
+        display: none;
+    }
+}
+
+/* LINK */
+/* The link is set brighter to better suit dark mode.*/
+.content a {
+    color: #38a7fc;
+    text-decoration: none;
+}
+
+.content a:visited {
+    color: #a697ea;
+}
+
+.content a:hover {
+    text-decoration: underline;
+}
+
+.content-header {
+    margin-block-start: 0;
+    padding: 20px 20px;
+    padding-top: 75px;
+    border: 1px solid var(--foreground-border);
+    background: var(--background-tertiary);
+    border-radius: 8px;
+}
+
+.content-header h1 {
+    font-size: 25px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.content-content h1 {
+    font-size: 27px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.content-header h3,
+.content-header h4,
+.content-content h3,
+.content-content h4 {
+    color: var(--foreground-secondary);
+    font-family: Arial, Helvetica, sans-serif
+}
+
+.content-header,
+.content-content h1,
+h2,
+h3 {
+    margin-block-start: 0;
+    margin-block-end: 10px;
+}
+
+.content {
+    max-width: 50%;
+    min-width: 1000px;
+    margin: auto;
+    z-index: -1000;
+    position: relative;
+    border-top: none;
+    padding-bottom: 50px;
+}
+
+@media only screen and (max-width: 1000px) {
+    .content {
+        margin-left: 0;
+        margin-right: 0;
+        max-width: 100%;
+        min-width: initial;
+        border: none;
+    }
+
+    .content-header h1 {
+        font-size: xx-large;
+    }
+
+    .side-contents+.content .content-header {
+        padding-top: 10px;
+    }
+}
+
+.content-content {
+    padding: 25px;
+    padding-top: 10px;
+    color: var(--foreground-primary);
+    background: var(--background-secondary);
+    border-radius: 8px;
+}
+
+.content-content h1,
+.content-content h2,
+.content-content h3,
+.content-content h4,
+.content-content h5,
+.content-content h6 {
+    margin-block-start: 1rem;
+    font-family: Arial, Helvetica, sans-serif
+}
+
+.content-content h1,
+.content-header h1 {
+    padding-bottom: 5px;
+    margin-bottom: 20px;
+}
+
+.content-content h1 {
+    border-bottom: 2px solid var(--foreground-border);
+}
+
+.site-name {
+    padding: 10px;
+}
+
+.site-name a {
+    font-size: x-large;
+    font-weight: bold;
+    color: var(--foreground-primary);
+    text-decoration: none;
+}
+
+.footer {
+    bottom: 0;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    padding-bottom: 1em;
+}
+
+.is-center {
+    text-align: center;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: min-content;
+    background: var(--background-secondary);
+    color: var(--foreground-primary);
+    text-align: center;
+    border-radius: 3px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: var(--foreground-border) transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+.l-box {
+    padding: 1em;
+}
+
+.l-box {
+    padding: 1em;
+}
+
+.form {
+    display: grid;
+}
+
+.label {
+    background: var(--background-tertiary);
+    margin: 2px;
+    padding: 4px;
+    border-radius: 4px;
+}
+
+.prog-container {
+    background: var(--background-tertiary);
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.prog-content {
+    background-color: var(--foreground-primary);
+    height: 5px;
+}
+
+.prog-content-large {
+    background-color: var(--foreground-primary);
+    height: 15px;
+}
+
+/* The sidebar menu */
+.side-contents {
+    height: 75%;
+    width: 140px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: calc((100% - 1200px)/2);
+    margin-right: 0;
+    background: var(--background-tertiary);
+    overflow-x: hidden;
+    padding: 20px;
+    margin: 10px;
+    margin-top: 100px;
+    border-radius: 8px;
+    border: 1px solid var(--foreground-border);
+}
+
+.side-contents * {
+    padding: 6px;
+}
+
+.side-contents a {
+    color: var(--foreground-primary);
+    display: block;
+    padding: 6px;
+    margin: none;
+    text-decoration: none;
+    transition: filter .4s;
+}
+
+.side-contents a:hover {
+    filter: brightness(130%);
+}
+
+.side-contents a.active {
+    font-weight: bold;
+    color: var(--background-primary);
+    background-color: var(--foreground-primary);
+}
+
+/* The content will move only if there is a side contents.*/
+.side-contents+.content {
+    margin-left: calc((100% - 800px)/2);
+}
+
+@media only screen and (max-width: 1300px) {
+    .side-contents {
+        height: max-content;
+        min-width: 100%;
+        max-width: 100%;
+        position: relative;
+        z-index: 1;
+        margin: auto;
+        padding: none;
+        background: var(--background-primary);
+        overflow-x: hidden;
+        padding-top: 80px;
+        left: 0;
+    }
+
+    .side-contents a {
+        color: var(--foreground-primary);
+        display: block;
+        font-size: larger;
+        text-decoration: none;
+        transition: filter .4s;
+    }
+
+
+    .side-contents+.content {
+        margin: auto;
+        /* small screen support soon */
+    }
+}
+
+.tag {
+    background: var(--background-tertiary);
+    margin: 0 2px;
+    padding: 1px 5px;
+    border: 1px solid var(--foreground-border);
+    color: var(--foreground-primary);
+    border-radius: 4px;
+    font-size: medium;
+}
+
+.content-content img {
+    width: 100%;
+    border: 1px solid var(--foreground-secondary);
+    border-radius: 8px;
+}
+
+/* CARD */
+
+/* The most basic element - can be used to contain almost anything. */
+.card {
+    border: 1px solid var(--foreground-border);
+    margin: 10px;
+    padding: 10px;
+    height: auto;
+    border-radius: 4px;
+}
+
+/* Adding a background to the card with the tertiary background color. */
+.card.background {
+    background: var(--background-tertiary);
+}
+
+/* Lists are moved left in cards to make it appear more compact. */
+.card ul {
+    margin: 0;
+    padding-left: 0.5cm;
+}
+
+.card.color-red {
+    border-left: 5px solid var(--red);
+}
+
+.card.color-green {
+    border-left: 5px solid var(--green);
+}
+
+.card.color-blue {
+    border-left: 5px solid var(--blue);
+}
+
+.card.color-yellow {
+    border-left: 5px solid var(--yellow);
+}
+
+.card.color-border {
+    border-left: 5px solid var(--foreground-border);
+}
+
+.card .card-header {
+    font-weight: bold;
+    padding-bottom: 0.25em;
+}
+
+.card .card-footer {
+    font-size: 0.8em;
+    margin-top: 0.5em;
+    color: var(--foreground-secondary);
+}
+
+/* BUTTONS */
+
+/* Your everyday button */
+.button {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background-tertiary);
+    color: var(--foreground-primary);
+    font-size: medium;
+    box-shadow: none;
+    padding: 5px 13px;
+    border-radius: 4px;
+    margin: 2px;
+    border: 1px solid var(--foreground-border);
+    outline: none;
+    display: inline-block;
+    transition: filter 0.4s, border-color 0.4s, background-color 0.4s;
+    text-decoration: none;
+}
+
+.button:hover {
+    filter: brightness(130%);
+    cursor: pointer;
+}
+
+/* This will invert the button colours to highlight it. */
+.button.selected {
+    color: var(--background-primary);
+    background-color: var(--foreground-primary);
+}
+
+.button.primary,
+.button.danger,
+.button.warn,
+.button.confirm {
+    border-color: transparent;
+}
+
+.button.primary {
+    background-color: var(--blue);
+}
+
+.button.danger {
+    background-color: var(--red);
+}
+
+.button.warn {
+    background-color: var(--yellow);
+}
+
+.button.confirm {
+    background-color: var(--green);
+}
+
+.button.hollow {
+    background: none;
+    border: 1px solid var(--foreground-border);
+}
+
+.button.borderless {
+    border: none;
+}
+
+.button.hollow:hover {
+    border: 1px solid var(--foreground-primary);
+}
+
+.button.borderless:hover {
+    border: none
+}
+
+.button[disabled],
+.button[aria-disabled],
+.button[disabled]:hover,
+.button[aria-disabled]:hover {
+    filter: brightness(70%);
+    border: var(--foreground-border) 1px solid;
+    cursor: default;
+}
+
+/*You will need this if the button isn't staying in shape*/
+.button-container {
+    display: inline-flex;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+/* INPUT */
+.input {
+    background-color: var(--background-primary);
+    color: var(--foreground-primary);
+    box-shadow: none;
+    padding: 7px;
+    border-radius: 4px;
+    margin: 5px;
+    border: 1px solid var(--foreground-border);
+    outline: none;
+    transition: filter 0.4s, border-color 0.4s;
+}
+
+.input.error {
+    border: 1px solid var(--red);
+}
+
+.input:hover,
+.input:focus {
+    border: 1px solid var(--foreground-primary);
+}
+
+.input:hover {
+    filter: brightness(130%);
+}
+
+.input[disabled],
+.input[aria-disabled],
+.input[disabled]:hover,
+.input[aria-disabled]:hover {
+    filter: brightness(70%);
+    border: none;
+}
+
+
+/* LINK */
+/* The link is set brighter to better suit dark mode.*/
+.link {
+    color: #38a7fc;
+    text-decoration: none;
+}
+
+.link:visited {
+    color: #a697ea;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+/* SMALL CODE */
+code {
+    background-color: var(--background-primary);
+    padding: 4px;
+    border-radius: 4px;
+}
+
+/* CODE BLOCK */
+pre {
+    background-color: var(--background-primary);
+    border-left: 5px solid var(--foreground-border);
+    padding: 10px;
+    color: var(--foreground-primary);
+}
+
+
+/* QUOTE AND INFORMATION */
+.quote,
+.alert p,
+.info p,
+.warn p,
+.success p,
+.error p {
+    background: linear-gradient(var(--background-tertiary));
+    padding: 0.5em 10px;
+    border-radius: 4px;
+}
+
+.quote {
+    border: none;
+    border-left: 5px solid;
+}
+
+.info p {
+    border-color: #0077ff;
+    background: linear-gradient(to right, var(--blue) 50%, #0077ff 100%);
+}
+
+.warn p {
+    border-color: #efbf00;
+    background: linear-gradient(to right, var(--yellow) 50%, #efbf00 100%);
+}
+
+.error p {
+    border-color: #bc0000;
+    background: linear-gradient(to right, var(--red) 50%, #bc0000 100%);
+}
+
+.success p {
+    border-color: #00e600;
+    background: linear-gradient(to right, var(--green) 50%, #00e600 100%);
+}
+
+/* TABLE */
+.table {
+    background-color: var(--background-tertiary);
+    border-collapse: collapse;
+    border: 1px solid var(--foreground-border);
+}
+
+.table th,
+td {
+    border: 1px solid var(--foreground-border);
+    padding: 5px;
+}
