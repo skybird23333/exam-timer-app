@@ -3,10 +3,15 @@
     <h1>Exam Timer Thing</h1>
     I am doing the <input v-model="paperName" @focus="isInputFocused = true" @blur="isInputFocused = false"
       placeholder="Skibidology Sigma College 2022" class="input"> paper
-    <div style="font-size: 3rem">{{ formatTime(time) }}</div>
+    <div>
+      Start my question at number <input v-model.number="startQuestionNumber" type="number" class="input">
+    </div>
+    <div>
+      End my exam at <input v-model.number="endExamTime" type="number" class="input"> minutes
+    </div>
+    <div style="font-size: 3rem">{{ formatTime(time, false) }}</div>
     P: Start/Stop | ENTER: Split | J: Show/Hide Timer | Hold R for 5s: Reset<br>
     Timer is {{ isVisible ? 'visible' : 'hidden' }}
-    <h3>Splits</h3>
     <ul>
       <li>
         <div class="card">
@@ -15,12 +20,13 @@
       </li>
       <li v-for="(split, index) in splits" :key="index" v-if="!isReadingTime">
         <div class="card">
-          Question {{ index + 1 }}: {{ isVisible ? formatTime(split) : "Timer hidden" }}
+          Question {{ startQuestionNumber + index }}: {{ isVisible ? formatTime(split) : "Timer hidden" }}
         </div>
       </li>
       <li v-if="!isReadingTime">
         <div class="card background">
-          <b>Question {{ splits.length + 1 }} {{ isVisible ? formatTime(currentSplit) : "Timer hidden" }}</b>
+          <b>Question {{ startQuestionNumber + splits.length }} : {{ isVisible ? formatTime(currentSplit) :
+            "Timer hidden" }}</b>
         </div>
       </li>
     </ul>
@@ -30,7 +36,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 
-const time = ref<number>(0); // Total running time
+const time = ref<number>(0); // Total running time excluding reading time
 const isRunning = ref<boolean>(false); // Timer state
 const readingTime = ref<number>(0); // Reading time
 const splits = ref<number[]>([]); // Stores split times
@@ -38,6 +44,8 @@ const currentSplit = ref<number>(0); // Time for the current split
 const isVisible = ref<boolean>(false); // Timer visibility state, initially false
 const paperName = ref<string>(''); // Paper name
 const isInputFocused = ref<boolean>(false); // Input focus state
+const startQuestionNumber = ref<number>(1); // Start question number
+const endExamTime = ref<number>(0); // End exam time in minutes
 let interval: number | null = null; // To store interval reference
 let isReadingTime = ref<boolean>(true); // State to check if it's reading time
 let resetTimeout: number | null = null; // To store reset timeout reference
@@ -50,6 +58,8 @@ const saveState = () => {
     currentSplit: currentSplit.value,
     isReadingTime: isReadingTime.value,
     paperName: paperName.value, // Save paper name
+    startQuestionNumber: startQuestionNumber.value, // Save start question number
+    endExamTime: endExamTime.value, // Save end exam time
   };
   localStorage.setItem('timerState', JSON.stringify(state));
 };
@@ -64,6 +74,8 @@ const loadState = () => {
     currentSplit.value = parsedState.currentSplit;
     isReadingTime.value = parsedState.isReadingTime;
     paperName.value = parsedState.paperName; // Load paper name
+    startQuestionNumber.value = parsedState.startQuestionNumber; // Load start question number
+    endExamTime.value = parsedState.endExamTime; // Load end exam time
   }
 };
 
@@ -72,13 +84,17 @@ const startStop = () => {
     if (interval) clearInterval(interval);
   } else {
     interval = window.setInterval(() => {
-      time.value += 10;
       if (isReadingTime.value) {
         readingTime.value += 10;
       } else {
+        time.value += 10;
         currentSplit.value += 10;
       }
       saveState();
+      if (endExamTime.value > 0 && time.value >= endExamTime.value * 60000) {
+        alert('Exam time is over!');
+        startStop();
+      }
     }, 10);
   }
   isRunning.value = !isRunning.value;
@@ -95,12 +111,12 @@ const split = () => {
   saveState();
 };
 
-const formatTime = (time: number): string => {
+const formatTime = (time: number, showMs = true): string => {
   const minutes = Math.floor(time / 60000);
   const seconds = Math.floor((time % 60000) / 1000);
   const milliseconds = ((time % 60000) % 1000) / 10;
 
-  return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}.${milliseconds < 10 ? `0${milliseconds}` : milliseconds}`;
+  return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}${showMs ? `.${milliseconds < 10 ? `0${milliseconds}` : milliseconds}` : ''}`;
 };
 
 const handleKeyPress = (event: KeyboardEvent) => {
@@ -138,10 +154,12 @@ const resetTimer = () => {
   currentSplit.value = 0;
   isReadingTime.value = true;
   paperName.value = ''; // Reset paper name
+  startQuestionNumber.value = 1; // Reset start question number
+  endExamTime.value = 0; // Reset end exam time
   saveState();
 };
 
-watch(paperName, () => {
+watch([paperName, startQuestionNumber, endExamTime], () => {
   saveState();
 });
 
