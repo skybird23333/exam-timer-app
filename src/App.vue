@@ -28,23 +28,35 @@
         </div>
       </li>
       <li v-for="(split, index) in splits" :key="index" v-if="!isReadingTime">
-        <div class="card">
+        <div class="card" :style="{
+          backgroundColor: marksReceived[index] < maxMarks[index] ? 'rgba(255,0,0,0.2)' : //red if got wrong
+            //blue if overtime(1 max mark on = 1 minute)
+            split > maxMarks[index] * 60000 ? 'rgba(0,0,255,0.2)' : 'none'
+        }">
           Question {{ startQuestionNumber + index }}: {{ isVisible ? formatTime(split) : "Timer hidden" }}
-          <div v-if="isMarkingMode">
-            <input v-model.number="marksReceived[index]" type="number" placeholder="Marks Received" class="input">
-            <input v-model.number="maxMarks[index]" type="number" placeholder="Max Marks" class="input">
-          </div>
+          <span v-if="isMarkingMode">
+            <input style="width: 3em" v-model.number="marksReceived[index]" type="number" placeholder="3"
+              class="input">/
+            <input style="width: 3em" v-model.number="maxMarks[index]" type="number" placeholder="3" class="input">
+            marks
+          </span>
         </div>
       </li>
       <li v-if="!isReadingTime">
-        <div class="card background">
+        <div class="card background" :style="{
+          backgroundColor: marksReceived[splits.length] < maxMarks[splits.length] ? 'rgba(255,0,0,0.2)' : //red if got wrong
+            //blue if overtime(1 max mark on = 1 minute)
+            currentSplit > maxMarks[splits.length] * 60000 ? 'rgba(0,0,255,0.2)' : 'var(--background-tertiary)'
+        }">
           <b>Question {{ startQuestionNumber + splits.length }} : {{ isVisible ? formatTime(currentSplit) :
             "Timer hidden" }}</b>
-          <div v-if="isMarkingMode">
-            <input v-model.number="marksReceived[splits.length]" type="number" placeholder="Marks Received"
+          <span v-if="isMarkingMode">
+            <input style="width: 3em" v-model.number="marksReceived[splits.length]" type="number" placeholder="3"
+              class="input">/
+            <input style="width: 3em" v-model.number="maxMarks[splits.length]" type="number" placeholder="3"
               class="input">
-            <input v-model.number="maxMarks[splits.length]" type="number" placeholder="Max Marks" class="input">
-          </div>
+            marks
+          </span>
         </div>
       </li>
     </ul>
