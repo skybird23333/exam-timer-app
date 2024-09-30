@@ -1,6 +1,14 @@
 <template>
   <div style="text-align: center; margin-top: 50px">
     <h1>Exam Timer Thing</h1>
+    <div>
+      <label>
+        <input type="checkbox" v-model="isMarkingMode"> Marking Mode
+      </label>
+    </div>
+    <div v-if="isMarkingMode">
+      <div>Total Marks: {{ totalMarks }}</div>
+    </div>
     I am doing the <input v-model="paperName" @focus="isInputFocused = true" @blur="isInputFocused = false"
       placeholder="Skibidology Sigma College 2022" class="input"> paper
     <div>
@@ -22,12 +30,21 @@
       <li v-for="(split, index) in splits" :key="index" v-if="!isReadingTime">
         <div class="card">
           Question {{ startQuestionNumber + index }}: {{ isVisible ? formatTime(split) : "Timer hidden" }}
+          <div v-if="isMarkingMode">
+            <input v-model.number="marksReceived[index]" type="number" placeholder="Marks Received" class="input">
+            <input v-model.number="maxMarks[index]" type="number" placeholder="Max Marks" class="input">
+          </div>
         </div>
       </li>
       <li v-if="!isReadingTime">
         <div class="card background">
           <b>Question {{ startQuestionNumber + splits.length }} : {{ isVisible ? formatTime(currentSplit) :
             "Timer hidden" }}</b>
+          <div v-if="isMarkingMode">
+            <input v-model.number="marksReceived[splits.length]" type="number" placeholder="Marks Received"
+              class="input">
+            <input v-model.number="maxMarks[splits.length]" type="number" placeholder="Max Marks" class="input">
+          </div>
         </div>
       </li>
     </ul>
@@ -35,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
+import { ref, onMounted, onBeforeUnmount, watch, computed } from 'vue';
 
 const time = ref<number>(0); // Total running time excluding reading time
 const isRunning = ref<boolean>(false); // Timer state
@@ -47,9 +64,16 @@ const paperName = ref<string>(''); // Paper name
 const isInputFocused = ref<boolean>(false); // Input focus state
 const startQuestionNumber = ref<number>(1); // Start question number
 const endExamTime = ref<number>(0); // End exam time in minutes
+const isMarkingMode = ref<boolean>(false); // Marking mode state
+const marksReceived = ref<number[]>([]); // Marks received for each question
+const maxMarks = ref<number[]>([]); // Max marks for each question
 let interval: number | null = null; // To store interval reference
 let isReadingTime = ref<boolean>(true); // State to check if it's reading time
 let resetTimeout: number | null = null; // To store reset timeout reference
+
+const totalMarks = computed(() => {
+  return `${marksReceived.value.reduce((sum, marks) => sum + (marks || 0), 0)}/${maxMarks.value.reduce((sum, marks) => sum + (marks || 0), 0)}`
+});
 
 const saveState = () => {
   const state = {
@@ -61,6 +85,8 @@ const saveState = () => {
     paperName: paperName.value, // Save paper name
     startQuestionNumber: startQuestionNumber.value, // Save start question number
     endExamTime: endExamTime.value, // Save end exam time
+    marksReceived: marksReceived.value, // Save marks received
+    maxMarks: maxMarks.value, // Save max marks
   };
   localStorage.setItem('timerState', JSON.stringify(state));
 };
@@ -77,6 +103,8 @@ const loadState = () => {
     paperName.value = parsedState.paperName; // Load paper name
     startQuestionNumber.value = parsedState.startQuestionNumber; // Load start question number
     endExamTime.value = parsedState.endExamTime; // Load end exam time
+    marksReceived.value = parsedState.marksReceived || []; // Load marks received
+    maxMarks.value = parsedState.maxMarks || []; // Load max marks
   }
 };
 
@@ -157,10 +185,12 @@ const resetTimer = () => {
   paperName.value = ''; // Reset paper name
   startQuestionNumber.value = 1; // Reset start question number
   endExamTime.value = 0; // Reset end exam time
+  marksReceived.value = []; // Reset marks received
+  maxMarks.value = []; // Reset max marks
   saveState();
 };
 
-watch([paperName, startQuestionNumber, endExamTime], () => {
+watch([paperName, startQuestionNumber, endExamTime, marksReceived, maxMarks], () => {
   saveState();
 });
 
