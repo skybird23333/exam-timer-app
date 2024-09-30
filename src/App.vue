@@ -10,7 +10,7 @@
       End my exam at <input v-model.number="endExamTime" type="number" class="input"> minutes
     </div>
     <div v-if="!isRunning">Paused</div>
-    <div style="font-size: 3rem">{{ formatTime(time, false) }}</div>
+    <div style="font-size: 3rem">{{ formatTime(time, false) }} minutes</div>
     P: Start/Stop | ENTER: Split | J: Show/Hide Timer | Hold R for 5s: Reset<br>
     Timer is {{ isVisible ? 'visible' : 'hidden' }}
     <ul>
@@ -112,12 +112,12 @@ const split = () => {
   saveState();
 };
 
-const formatTime = (time: number, showMs = true): string => {
+const formatTime = (time: number, showSandMs = true): string => {
   const minutes = Math.floor(time / 60000);
   const seconds = Math.floor((time % 60000) / 1000);
   const milliseconds = ((time % 60000) % 1000) / 10;
 
-  return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}${showMs ? `.${milliseconds < 10 ? `0${milliseconds}` : milliseconds}` : ''}`;
+  return `${minutes}${showSandMs ? `:${seconds < 10 ? `0${seconds}` : seconds}.${milliseconds < 10 ? `0${milliseconds}` : milliseconds}` : ''}`;
 };
 
 const handleKeyPress = (event: KeyboardEvent) => {
